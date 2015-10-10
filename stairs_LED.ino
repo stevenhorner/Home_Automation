@@ -59,7 +59,7 @@ void loop() {
     
      breathe = breathe + change;
      strip.setPixelColor(0,0,0,breathe);
-     strip.setPixelColor(116,0,0,breathe);
+     strip.setPixelColor(102,0,0,breathe);
      strip.show();
      if (breathe == 100 || breathe == 0) change = -change;      // breathe the LED from 0 = off to 100 = fairly bright
      if (breathe == 100 || breathe == 0) delay (300);           // Pause at beginning and end of each breath
