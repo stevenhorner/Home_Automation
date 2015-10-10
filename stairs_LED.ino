@@ -143,14 +143,14 @@ void loop() {
 
  // Play the Waterfall effect
  void waterfall(){
-    for(int i=347; i>-1; i--) {            // Shift the RGB colours down in the colourArray[] 
+    for(int i=309; i>-1; i--) {            // Shift the RGB colours down in the colourArray[] 
         colourArray[i+3]=colourArray[i];
         }
       colourArray[0] = random(0,20);        // Genearate the red component of the 1st LED at the top of the stairs
       colourArray[1] = random(0,40);        // Genearate the green component of the 1st LED at the top of the stairs
       colourArray[2] = random(10,70);       // Genearate the blue component of the 1st LED at the top of the stairs
     
-      for (int k=0; k<351; k=k+3)   {       // Set and send the colours to the strip
+      for (int k=0; k<305; k=k+3)   {       // Set and send the colours to the strip
        uint32_t c = strip.Color(colourArray[k],colourArray[k+1],colourArray[k+2]);
        strip.setPixelColor(((k+3)/3)-1,c);
        }
@@ -166,7 +166,7 @@ void loop() {
      colourArray[i]=colourArray[i]-1;      // reduce intensity of light by 1
      if (colourArray[i] <= 0 ) colourArray[i] = 0;
    }
-   for (int k=0; k<351; k=k+3)   {
+   for (int k=0; k<305; k=k+3)   {
      uint32_t c = strip.Color(colourArray[k],colourArray[k+1],colourArray[k+2]);
      strip.setPixelColor(((k+3)/3)-1,c);
    }
