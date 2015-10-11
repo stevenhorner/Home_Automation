@@ -26,8 +26,8 @@ Adafruit_NeoPixel strip = Adafruit_NeoPixel(103, PIN, NEO_GRB + NEO_KHZ800);
  int downUp = 0;              // variable to rememer the direction of travel up or down the stairs
  int alarmPinTop = 10;        // PIR at the top of the stairs
  int alarmPinBottom =11;      // PIR at the bottom of the stairs
- int alarmValueTop = HIGH;    // Variable to hold the PIR status
- int alarmValueBottom = HIGH; // Variable to hold the PIR status
+ int alarmValueTop = LOW;    // Variable to hold the PIR status
+ int alarmValueBottom = LOW; // Variable to hold the PIR status
  int ledPin = 13;           // LED on the arduino board flashes when PIR activated
  int LDRSensor = A0;        // Light dependant resistor
  int LDRValue = 0;          // Variable to hold the LDR value
@@ -71,13 +71,13 @@ void loop() {
     alarmValueTop = digitalRead(alarmPinTop);        // Constantly poll the PIR at the top of the stairs
     alarmValueBottom = digitalRead(alarmPinBottom);  // Constantly poll the PIR at the bottom of the stairs
     
-    if (alarmValueTop == LOW && downUp != 2)  {      // the 2nd term allows timeOut to be contantly reset if one lingers at the top of the stairs before decending but will not allow the bottom PIR to reset timeOut as you decend past it.
+    if (alarmValueTop == HIGH && downUp != 2)  {      // the 2nd term allows timeOut to be contantly reset if one lingers at the top of the stairs before decending but will not allow the bottom PIR to reset timeOut as you decend past it.
       timeOut=millis();  // Timestamp when the PIR is triggered.  The LED cycle wil then start.
       downUp = 1;
       topdown();         // lights up the strip from top down
     }
  
-    if (alarmValueBottom == LOW && downUp != 1)  {    // the 2nd term allows timeOut to be contantly reset if one lingers at the bottom of the stairs before decending but will not allow the top PIR to reset timeOut as you decend past it.
+    if (alarmValueBottom == HIGH && downUp != 1)  {    // the 2nd term allows timeOut to be contantly reset if one lingers at the bottom of the stairs before decending but will not allow the top PIR to reset timeOut as you decend past it.
       timeOut=millis();    // Timestamp when the PIR is triggered.  The LED cycle wil then start.
       downUp = 2;
       bottomup();         // lights up the strip from bottom up
