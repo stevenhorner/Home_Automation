@@ -1,7 +1,6 @@
-
+// Modified by Steven Horner 2015
 // "Bling" up your Staircase By Simon Jowett November 2014
-// Thanks to the Neopxel Library by Adafruit
-
+// Thanks to the Neopixel Library by Adafruit
 
 #include <Adafruit_NeoPixel.h>
 
@@ -16,25 +15,19 @@
 //   NEO_RGB     Pixels are wired for RGB bitstream (v1 FLORA pixels, not v2)
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(103, PIN, NEO_GRB + NEO_KHZ800);
 
-// IMPORTANT: To reduce NeoPixel burnout risk, add 1000 uF capacitor across
-// pixel power leads, add 300 - 500 Ohm resistor on first pixel's data input
-// and minimize distance between Arduino and first pixel.  Avoid connecting
-// on a live circuit...if you must, connect GND first.
 
 // Set up Variables
  unsigned long timeOut=60000; // timestamp to remember when the PIR was triggered.
  int downUp = 0;              // variable to rememer the direction of travel up or down the stairs
  int alarmPinTop = 10;        // PIR at the top of the stairs
- int alarmPinBottom =11;      // PIR at the bottom of the stairs
+ int alarmPinBottom = 11;      // PIR at the bottom of the stairs
  int alarmValueTop = LOW;    // Variable to hold the PIR status
  int alarmValueBottom = LOW; // Variable to hold the PIR status
  int ledPin = 13;           // LED on the arduino board flashes when PIR activated
- int LDRSensor = A0;        // Light dependant resistor
- int LDRValue = 0;          // Variable to hold the LDR value
  int colourArray[350];      // An array to hold RGB values
  int change = 1;            // used in 'breathing' the LED's
  int breathe = 0;           // used in 'breathing' the LED's
- 
+
 
 void setup() {
    strip.begin();
@@ -51,10 +44,6 @@ void setup() {
 }
 
 void loop() {
-  
-  LDRValue = analogRead(LDRSensor);
-  Serial.println(LDRValue);
-  
   if (timeOut+57000 < millis()) {        // idle state - 'breathe' the top and bottom LED to show program is looping
     
      breathe = breathe + change;
@@ -65,23 +54,24 @@ void loop() {
      if (breathe == 100 || breathe == 0) delay (300);           // Pause at beginning and end of each breath
      delay(25); 
   }
-  
-  if (LDRValue > 600) {        // only switch on LED's at night when LDR senses low light conditions - you may have to change the number for your circumstances!
-  
+
     alarmValueTop = digitalRead(alarmPinTop);        // Constantly poll the PIR at the top of the stairs
-    alarmValueBottom = digitalRead(alarmPinBottom);  // Constantly poll the PIR at the bottom of the stairs
+    alarmValueBottom = digitalRead(alarmPinBottom);        // Constantly poll the PIR at the top of the stairs
     
     if (alarmValueTop == HIGH && downUp != 2)  {      // the 2nd term allows timeOut to be contantly reset if one lingers at the top of the stairs before decending but will not allow the bottom PIR to reset timeOut as you decend past it.
       timeOut=millis();  // Timestamp when the PIR is triggered.  The LED cycle wil then start.
       downUp = 1;
       topdown();         // lights up the strip from top down
+      
     }
- 
+
+
     if (alarmValueBottom == HIGH && downUp != 1)  {    // the 2nd term allows timeOut to be contantly reset if one lingers at the bottom of the stairs before decending but will not allow the top PIR to reset timeOut as you decend past it.
       timeOut=millis();    // Timestamp when the PIR is triggered.  The LED cycle wil then start.
       downUp = 2;
       bottomup();         // lights up the strip from bottom up
-    }
+    }    
+
     if (timeOut+10000 < millis() && timeOut+15000 < millis()) {    //switch off LED's in the direction of travel.
        if (downUp == 1) {
           colourWipeDown(strip.Color(0, 0, 0), 50); // Off
@@ -93,13 +83,13 @@ void loop() {
       //   for (int i=0 ;i < 350; i++)  {          // Depending on your preference you may want to include this loop to clear out the colourArray
       //    colourArray[i]=0; 
       // }
-    }
-    
+    }    
     if (timeOut+15000 < millis() && timeOut+54999 > millis()) waterfall();    // Waterfall effect to play between these times after a PIR trigger.
         
-    if (timeOut+55000 < millis() && timeOut+56999 > millis()) fade();   // Fade/switch off LED's
-  }
+    if (timeOut+55000 < millis() && timeOut+56999 > millis()) fade();   // Fade/switch off LED's    
 }
+
+//Below are the various effects
 
  void topdown() {
     Serial.println ("detected top");                // Helpful debug message
